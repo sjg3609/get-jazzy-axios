@@ -9,6 +9,7 @@ function getArtists() {
         // quotesFromServer will be an Array of quotes
         let quotesFromServer = response.data;
         let contentDiv = document.querySelector('#artistTableBody');
+        contentDiv.innerHTML = '';
         for(let artist of quotesFromServer) {
             contentDiv.innerHTML += `
                 <tr>
@@ -48,22 +49,21 @@ function getSongs() {
 getSongs();
 
 function submitArtist(event) {
-    axios.post('/artist').then((response) => {
-        console.log('response from submitArtist');
-        let artistName = document.querySelector('#artistName');
-        let yearBorn = document.querySelector('#yearBorn');
-        let yearDied = document.querySelector('#yearDied');
-        let artistForServer = {
-            name: artistName,
-            born: yearBorn,
-            died: yearDied,
-        };
-        axios.post('/artist', artistForServer).then((response) => {
-            console.log(response);
-            getArtists();
-        }).catch((error) => {
-            console.log(error);
-            alert('Something went wrong.');
-        });
+    event.preventDefault();
+    console.log('response from submitArtist');
+    let artistName = document.querySelector('#artistName').value;
+    let yearBorn = document.querySelector('#yearBorn').value;
+    let yearDied = document.querySelector('#yearDied').value;
+    let artistForServer = {
+        name: artistName,
+        born: yearBorn,
+        died: yearDied,
+    };
+    axios.post('/artist', artistForServer).then((response) => {
+        console.log(response);
+        getArtists();
+    }).catch((error) => {
+        console.log(error);
+        alert('Something went wrong.');
     });
-}
+};
